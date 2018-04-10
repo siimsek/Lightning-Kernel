@@ -6,7 +6,7 @@
 
 static int cmdline_proc_show(struct seq_file *m, void *v)
 {
-	seq_puts(m, saved_command_line);
+	seq_puts(m, new_command_line);
 	seq_putc(m, '\n');
 	return 0;
 }
