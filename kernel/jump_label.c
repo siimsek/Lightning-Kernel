@@ -206,11 +206,7 @@ EXPORT_SYMBOL_GPL(static_key_disable);
 
 static bool static_key_slow_try_dec(struct static_key *key)
 {
-	int val;
-
-	val = __atomic_add_unless(&key->enabled, -1, 1);
-	if (val == 1)
-		return false;
+	lockdep_assert_cpus_held();
 
 	/*
 	 * The negative count check is valid even when a negative
