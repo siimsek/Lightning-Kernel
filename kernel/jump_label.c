@@ -268,11 +268,7 @@ void __static_key_slow_dec_deferred(struct static_key *key,
 				    unsigned long timeout)
 {
 	STATIC_KEY_CHECK_USE();
-
-	if (static_key_slow_try_dec(key))
-		return;
-
-	schedule_delayed_work(work, timeout);
+	__static_key_slow_dec(key, timeout, work);
 }
 EXPORT_SYMBOL_GPL(__static_key_slow_dec_deferred);
 
