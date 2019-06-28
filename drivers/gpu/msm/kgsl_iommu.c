@@ -786,8 +786,6 @@ static struct kgsl_process_private *kgsl_iommu_get_process(u64 ptbase)
 	list_for_each_entry(p, &kgsl_driver.process_list, list) {
 		iommu_pt = p->pagetable->priv;
 		if (iommu_pt->ttbr0 == ptbase) {
-			if (!kgsl_process_private_get(p))
-				p = NULL;
 			spin_unlock(&kgsl_driver.proclist_lock);
 			return p;
 		}
