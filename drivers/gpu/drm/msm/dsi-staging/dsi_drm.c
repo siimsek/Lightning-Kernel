@@ -1144,7 +1144,7 @@ struct dsi_bridge *dsi_drm_bridge_init(struct dsi_display *display,
 		atomic_set(&prim_panel_is_on, false);
 		init_waitqueue_head(&resume_wait_q);
 		INIT_DELAYED_WORK(&prim_panel_work, prim_panel_off_delayed_work);
-
+	}
 
 	return bridge;
 error_free_bridge:
