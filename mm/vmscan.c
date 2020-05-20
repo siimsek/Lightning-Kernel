@@ -3509,7 +3509,7 @@ static int balance_pgdat(pg_data_t *pgdat, int order, int highest_zoneidx)
 
 		/* Check if kswapd should be suspending */
 		if (try_to_freeze() || kthread_should_stop() ||
-		    !atomic_read(&pgdat->kswapd_waiters))
+		    !atomic_long_read(&kswapd_waiters))
 			break;
 
 		/*
