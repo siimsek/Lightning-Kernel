@@ -2862,7 +2862,7 @@ static inline enum sched_boost_policy sched_boost_policy(void)
 extern unsigned int sched_boost_type;
 static inline int sched_boost(void)
 {
-	return is_battery_saver_on() ? 0 : sched_boost_type;
+	return 0;
 }
 
 extern int preferred_cluster(struct sched_cluster *cluster,
