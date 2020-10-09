@@ -62,12 +62,15 @@ ifeq ($(KERNEL_LLVM_SUPPORT), true)
   ifeq ($(KERNEL_SD_LLVM_SUPPORT), true)  #Using sd-llvm compiler
     ifeq ($(shell echo $(SDCLANG_PATH) | head -c 1),/)
        KERNEL_LLVM_BIN := $(SDCLANG_PATH)/clang
+       KERNEL_LLD_BIN := $(SDCLANG_PATH)/ld.lld
     else
        KERNEL_LLVM_BIN := $(shell pwd)/$(SDCLANG_PATH)/clang
+       KERNEL_LLD_BIN := $(shell pwd)/$(SDCLANG_PATH)/ld.lld
     endif
     $(warning "Using sdllvm" $(KERNEL_LLVM_BIN))
   else
      KERNEL_LLVM_BIN := $(shell pwd)/$(CLANG) #Using aosp-llvm compiler
+     KERNEL_LLD_BIN := $(shell pwd)/ld.lld
     $(warning "Using aosp-llvm" $(KERNEL_LLVM_BIN))
   endif
 endif
@@ -79,9 +82,9 @@ KERNEL_GCC_NOANDROID_CHK := $(shell (echo "int main() {return 0;}" | $(KERNEL_CR
 cc :=
 ifeq ($(KERNEL_LLVM_SUPPORT),true)
   ifeq ($(KERNEL_ARCH), arm64)
-    cc := CC=$(KERNEL_LLVM_BIN) CLANG_TRIPLE=aarch64-linux-gnu-
+    cc := CC=$(KERNEL_LLVM_BIN) LD=$(KERNEL_LLD_BIN) CLANG_TRIPLE=aarch64-linux-gnu-
   else
-    cc := CC=$(KERNEL_LLVM_BIN) CLANG_TRIPLE=arm-linux-gnueabihf
+    cc := CC=$(KERNEL_LLVM_BIN) LD=$(KERNEL_LLD_BIN) CLANG_TRIPLE=arm-linux-gnueabihf
   endif
 else
 ifeq ($(strip $(KERNEL_GCC_NOANDROID_CHK)),0)
