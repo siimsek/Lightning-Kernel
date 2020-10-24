@@ -23,6 +23,7 @@ static const char * const backends[] = {
 	"lz4",
 #else
 	"lzo",
+	"lzo-rle",
 #endif
 #if IS_ENABLED(CONFIG_CRYPTO_DEFLATE)
 	"deflate",
