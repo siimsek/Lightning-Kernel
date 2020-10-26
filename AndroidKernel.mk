@@ -58,6 +58,8 @@ else
 KERNEL_CROSS_COMPILE := $(TARGET_KERNEL_CROSS_COMPILE_PREFIX)
 endif
 
+TARGET_KERNEL_CLANG_PATH ?= $(shell dirname $(CLANG))
+
 ifeq ($(KERNEL_LLVM_SUPPORT), true)
   ifeq ($(KERNEL_SD_LLVM_SUPPORT), true)  #Using sd-llvm compiler
     ifeq ($(shell echo $(SDCLANG_PATH) | head -c 1),/)
@@ -67,8 +69,7 @@ ifeq ($(KERNEL_LLVM_SUPPORT), true)
     endif
     $(warning "Using sdllvm for kernel build" $(SDCLANG_PATH))
   else
-    PATH_OVERRIDE := PATH=$(shell dirname $(CLANG)):$$PATH
-    $(warning "Using aosp-llvm for kernel build" $(CLANG))
+    PATH_OVERRIDE := PATH=$(TARGET_KERNEL_CLANG_PATH):$$PATH
   endif
 endif
 
