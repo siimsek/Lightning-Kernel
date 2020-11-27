@@ -1,5 +1,4 @@
 /* Copyright (c) 2012-2015, 2017-2018, The Linux Foundation.
- * Copyright (C) 2019 XiaoMi, Inc.
  * All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -62,8 +61,6 @@ enum pon_restart_reason {
 	PON_RESTART_REASON_DMVERITY_CORRUPTED	= 0x04,
 	PON_RESTART_REASON_DMVERITY_ENFORCE	= 0x05,
 	PON_RESTART_REASON_KEYS_CLEAR		= 0x06,
-	PON_RESTART_REASON_NORMAL		= 0x20,
-	PON_RESTART_REASON_PANIC		= 0x21
 };
 
 #ifdef CONFIG_INPUT_QPNP_POWER_ON
@@ -73,6 +70,7 @@ int qpnp_pon_trigger_config(enum pon_trigger_source pon_src, bool enable);
 int qpnp_pon_wd_config(bool enable);
 int qpnp_pon_set_restart_reason(enum pon_restart_reason reason);
 bool qpnp_pon_check_hard_reset_stored(void);
+
 #else
 static int qpnp_pon_system_pwr_off(enum pon_power_off_type type)
 {
