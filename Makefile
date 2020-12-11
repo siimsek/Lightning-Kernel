@@ -375,16 +375,18 @@ HOSTCFLAGS  += -Wno-unused-value -Wno-unused-parameter \
 endif
 
 # Make variables (CC, etc...)
-AS		= $(CROSS_COMPILE)as
-LD		= $(CROSS_COMPILE)ld
-CC		= $(CROSS_COMPILE)gcc
+CC		= clang
+CC_DIR		= $(shell echo $(CC) | sed 's/clang//')
+AS              = $(CROSS_COMPILE)as
+LD              = $(CC_DIR)ld.lld
+ld-name		= lld
 LDGOLD		= $(CROSS_COMPILE)ld.gold
 CPP		= $(CC) -E
-AR		= $(CROSS_COMPILE)ar
-NM		= $(CROSS_COMPILE)nm
-STRIP		= $(CROSS_COMPILE)strip
-OBJCOPY		= $(CROSS_COMPILE)objcopy
-OBJDUMP		= $(CROSS_COMPILE)objdump
+AR		= $(CC_DIR)llvm-ar
+NM		= $(CC_DIR)llvm-nm
+STRIP		= $(CC_DIR)llvm-strip
+OBJCOPY		= $(CC_DIR)llvm-objcopy
+OBJDUMP		= $(CC_DIR)llvm-objdump
 AWK		= awk
 GENKSYMS	= scripts/genksyms/genksyms
 INSTALLKERNEL  := installkernel
@@ -678,8 +680,8 @@ LDFLAGS		+= -plugin LLVMgold.so
 endif
 # use llvm-ar for building symbol tables from IR files, and llvm-dis instead
 # of objdump for processing symbol versions and exports
-LLVM_AR		:= llvm-ar
-LLVM_NM		:= llvm-nm
+LLVM_AR		:= $(AR)
+LLVM_NM		:= $(NM)
 export LLVM_AR LLVM_NM
 # Set O3 optimization level for LTO
 LDFLAGS		+= --plugin-opt=O3
