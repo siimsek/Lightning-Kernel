@@ -1,6 +1,6 @@
 export PATH="$HOME/proton/bin:$PATH"
 SECONDS=0
-ZIPNAME="Surge-ginkgo-$(date '+%Y%m%d-%H%M').zip"
+ZIPNAME="SurgeX-ginkgo-$(date '+%Y%m%d-%H%M').zip"
 
 if ! [ -d "$HOME/proton" ]; then
 echo "Proton clang not found! Cloning..."
