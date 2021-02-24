@@ -4,7 +4,7 @@ ZIPNAME="SurgeX-ginkgo-$(date '+%Y%m%d-%H%M').zip"
 
 if ! [ -d "$HOME/proton" ]; then
 echo "Proton clang not found! Cloning..."
-if ! git clone -q https://github.com/kdrag0n/proton-clang --depth=1 --single-branch ~/proton; then
+if ! git clone -q https://github.com/madmax7896/proton-clang --depth=1 --single-branch ~/proton; then
 echo "Cloning failed! Aborting..."
 exit 1
 fi
