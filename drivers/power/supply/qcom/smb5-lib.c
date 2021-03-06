@@ -790,13 +790,6 @@ static int smblib_usb_pd_adapter_allowance_override(struct smb_charger *chg,
 	return rc;
 }
 
-static int smblib_set_adapter_allowance(struct smb_charger *chg, 
-					u8 allowed_voltage) 
-{
-	return smblib_usb_pd_adapter_allowance_override(chg,
-					allowed_voltage);
-}
-
 #define MICRO_5V	5000000
 #define MICRO_9V	9000000
 #define MICRO_12V	12000000
@@ -6092,8 +6085,6 @@ static void typec_src_removal(struct smb_charger *chg)
 
 	del_timer_sync(&chg->apsd_timer);
 	chg->apsd_ext_timeout = false;
-	chg->qc2_unsupported = false;
-	chg->recheck_charger = false;
 }
 
 static void typec_mode_unattached(struct smb_charger *chg)

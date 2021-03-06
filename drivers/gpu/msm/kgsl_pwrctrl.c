@@ -613,8 +613,7 @@ void kgsl_pwrctrl_update_l2pc(struct kgsl_device *device,
 	put_cpu();
 
 	if ((1 << cpu) & device->pwrctrl.l2pc_cpus_mask) {
-		pm_qos_update_request_timeout(
-				&device->pwrctrl.l2pc_cpus_qos,
+		               (&device->pwrctrl.l2pc_cpus_qos,
 				device->pwrctrl.pm_qos_cpu_mask_latency,
 				timeout_us);
 	}
