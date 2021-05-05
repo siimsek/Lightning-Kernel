@@ -28,11 +28,6 @@ unsigned int sysctl_sched_boost; /* To/from userspace */
 unsigned int sched_boost_type; /* currently activated sched boost */
 enum sched_boost_policy boost_policy;
 
-#ifdef CONFIG_DYNAMIC_STUNE_BOOST
-static int boost_slot_ta;
-static int boost_slot_fg;
-#endif
-
 static enum sched_boost_policy boost_policy_dt = SCHED_BOOST_NONE;
 static DEFINE_MUTEX(boost_mutex);
 
@@ -220,27 +215,6 @@ static void sched_boost_disable_all(void)
 
 static void _sched_set_boost(int type)
 {
-#ifdef CONFIG_DYNAMIC_STUNE_BOOST
-	if (type <= 0) {
-		reset_stune_boost("top-app", boost_slot_ta);
-		reset_stune_boost("foreground", boost_slot_fg);
-	}
-
-	if (is_battery_saver_on())
-		goto skip_boost;
-
-	if (type == 1) { /* FULL_THROTTLE_BOOST */
-		do_stune_boost("top-app", 20, &boost_slot_ta);
-		do_stune_boost("foreground", 5, &boost_slot_fg);
-	} else if (type == 2) { /* CONSERVATIVE_BOOST */
-		do_stune_boost("top-app", 5, &boost_slot_ta);
-	} else if (type == 3) { /* RESTRAINED_BOOST */
-		do_stune_boost("top-app", 10, &boost_slot_ta);
-		do_stune_boost("foreground", 1, &boost_slot_fg);
-	}
-
-skip_boost:
-#endif
 	if (type == 0)
 		sched_boost_disable_all();
 	else if (type > 0)
