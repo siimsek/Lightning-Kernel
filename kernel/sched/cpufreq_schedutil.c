@@ -1001,7 +1001,7 @@ static void sugov_tunables_free(struct sugov_tunables *tunables)
 	if (!have_governor_per_policy())
 		global_tunables = NULL;
 
-	kfree(tunables);
+        kfree(tunables);
 }
 
 static void sugov_tunables_restore(struct cpufreq_policy *policy)
