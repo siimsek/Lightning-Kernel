@@ -1,10 +1,28 @@
-export PATH="$HOME/proton/bin:$PATH"
+export PATH="$HOME/aosp-clang/bin:$PATH"
+GCC_64_DIR="$HOME/aarch64-linux-android-4.9"
+GCC_32_DIR="$HOME/arm-linux-androideabi-4.9"
 SECONDS=0
 ZIPNAME="SurgeX-ginkgo-$(date '+%Y%m%d-%H%M').zip"
 
-if ! [ -d "$HOME/proton" ]; then
-echo "Proton clang not found! Cloning..."
-if ! git clone -q https://github.com/kdrag0n/proton-clang --depth=1 --single-branch ~/proton; then
+if ! [ -d "$HOME/aosp-clang" ]; then
+echo "Aosp clang not found! Cloning..."
+if ! git clone -q https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r437112.git --depth=1 --single-branch ~/aosp-clang; then
+echo "Cloning failed! Aborting..."
+exit 1
+fi
+fi
+
+if ! [ -d "$HOME/aarch64-linux-android-4.9" ]; then
+echo "aarch64-linux-android-4.9 not found! Cloning..."
+if ! git clone -q https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git --depth=1 --single-branch ~/aarch64-linux-android-4.9; then
+echo "Cloning failed! Aborting..."
+exit 1
+fi
+fi
+
+if ! [ -d "$HOME/arm-linux-androideabi-4.9" ]; then
+echo "arm-linux-androideabi-4.9 not found! Cloning..."
+if ! git clone -q https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9.git --depth=1 --single-branch ~/arm-linux-androideabi-4.9; then
 echo "Cloning failed! Aborting..."
 exit 1
 fi
@@ -19,7 +37,7 @@ echo -e "\nRegened defconfig succesfully!"
 exit 0
 else
 echo -e "\nStarting compilation...\n"
-make -j$(nproc --all) O=out ARCH=arm64 CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- Image.gz-dtb dtbo.img
+make -j$(nproc --all) O=out ARCH=arm64 CC=clang LD=ld.lld AS=llvm-as AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip CROSS_COMPILE=$GCC_64_DIR/bin/aarch64-linux-android- CROSS_COMPILE_ARM32=$GCC_32_DIR/bin/arm-linux-androideabi- CLANG_TRIPLE=aarch64-linux-gnu- Image.gz-dtb dtbo.img
 fi
 
 if [ -f "out/arch/arm64/boot/Image.gz-dtb" ] && [ -f "out/arch/arm64/boot/dtbo.img" ]; then
