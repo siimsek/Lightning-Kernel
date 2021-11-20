@@ -5284,10 +5284,6 @@ static int sde_crtc_atomic_check(struct drm_crtc *crtc,
 		goto end;
 	}
 
-	memset(pstates, 0, SDE_PSTATES_MAX * sizeof(struct plane_state));
-	memset(multirect_plane, 0,
-		   SDE_MULTIRECT_PLANE_MAX * sizeof(struct sde_multirect_plane_states));
-
 	mode = &state->adjusted_mode;
 	SDE_DEBUG("%s: check", sde_crtc->name);
 
