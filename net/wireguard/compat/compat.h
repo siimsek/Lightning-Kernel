@@ -798,9 +798,9 @@ static __always_inline void old_rcu_barrier(void)
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 5, 0)
 #define blake2s_init zinc_blake2s_init
 #define blake2s_init_key zinc_blake2s_init_key
-#define blake2s_update zinc_blake2s_update
-#define blake2s_final zinc_blake2s_final
-#define blake2s_hmac zinc_blake2s_hmac
+#define wg_blake2s_update zinc_wg_blake2s_update
+#define wg_blake2s_final zinc_wg_blake2s_final
+#define wg_blake2s_hmac zinc_wg_blake2s_hmac
 #define chacha20 zinc_chacha20
 #define hchacha20 zinc_hchacha20
 #define chacha20poly1305_encrypt zinc_chacha20poly1305_encrypt
