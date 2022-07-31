@@ -1,8 +1,8 @@
 #!/bin/bash
 
 SECONDS=0 # builtin bash timer
-ZIPNAME="Lightning.Kernel-ginkgo_A11-A13_$(date '+%Y%m%d')-SKC.zip"
-TC_DIR="$HOME/tc/SK-Clang"
+ZIPNAME="Lightning.Kernel-ginkgo_A11-A13_$(date '+%Y%m%d')-AC.zip"
+TC_DIR="$HOME/tc/aosp-clang"
 GCC_64_DIR="$HOME/tc/aarch64-linux-android-4.9"
 GCC_32_DIR="$HOME/tc/arm-linux-androideabi-4.9"
 AK3_DIR="$HOME/android/AnyKernel3"
@@ -10,12 +10,12 @@ DEFCONFIG="vendor/ginkgo-perf_defconfig"
 
 export PATH="$TC_DIR/bin:$PATH"
 export KBUILD_BUILD_USER=Siimsek
-export KBUILD_BUILD_HOST=SKProject
-export KBUILD_BUILD_VERSION="Telegram @SKProject"
+export KBUILD_BUILD_HOST=SK_Projects
+export KBUILD_BUILD_VERSION=""
 
 if ! [ -d "${TC_DIR}" ]; then
 echo "Clang not found! Cloning to ${TC_DIR}..."
-if ! git clone --depth=1 https://github.com/siimsek/SK-Clang ${TC_DIR}; then
+if ! git clone -q https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r450784.git --depth=1 --single-branch ~/aosp-clang; then
 echo "Cloning failed! Aborting..."
 exit 1
 fi

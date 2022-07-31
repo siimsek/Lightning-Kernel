@@ -1,8 +1,8 @@
 #!/bin/bash
 
 SECONDS=0 # builtin bash timer
-ZIPNAME="Lightning.Kernel-ginkgo_A11-A13_$(date '+%Y%m%d')-SKC.zip"
-TC_DIR="$HOME/tc/SK-Clang"
+ZIPNAME="Lightning.Kernel-ginkgo_A11-A13_$(date '+%Y%m%d')-PC.zip"
+TC_DIR="$HOME/tc/proton-clang"
 GCC_64_DIR="$HOME/tc/aarch64-linux-android-4.9"
 GCC_32_DIR="$HOME/tc/arm-linux-androideabi-4.9"
 AK3_DIR="$HOME/android/AnyKernel3"
@@ -15,7 +15,7 @@ export KBUILD_BUILD_VERSION="Telegram @SKProject"
 
 if ! [ -d "${TC_DIR}" ]; then
 echo "Clang not found! Cloning to ${TC_DIR}..."
-if ! git clone --depth=1 https://github.com/siimsek/SK-Clang ${TC_DIR}; then
+if ! git clone --depth=1 https://gitlab.com/LeCmnGend/proton-clang ${TC_DIR}; then
 echo "Cloning failed! Aborting..."
 exit 1
 fi
