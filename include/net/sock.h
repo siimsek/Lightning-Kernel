@@ -2453,25 +2453,27 @@ extern int sysctl_optmem_max;
 extern __u32 sysctl_wmem_default;
 extern __u32 sysctl_rmem_default;
 
-/* Default TCP Small queue budget is ~1 ms of data (1sec >> 10)
- * Some wifi drivers need to tweak it to get more chunks.
- * They can use this helper from their ndo_start_xmit()
- */
-static inline void sk_pacing_shift_update(struct sock *sk, int val)
-{
-	if (!sk || !sk_fullsock(sk) || sk->sk_pacing_shift == val)
-		return;
-	sk->sk_pacing_shift = val;
-}
-/* SOCKEV Notifier Events */
-#define SOCKEV_SOCKET   0x00
-#define SOCKEV_BIND     0x01
-#define SOCKEV_LISTEN   0x02
-#define SOCKEV_ACCEPT   0x03
-#define SOCKEV_CONNECT  0x04
-#define SOCKEV_SHUTDOWN 0x05
-
-int sockev_register_notify(struct notifier_block *nb);
+/* Default TCP Small queue budget is ~1 ms of data (1sec >> 10)	
+ * Some wifi drivers need to tweak it to get more chunks.	
+ * They can use this helper from their ndo_start_xmit()	
+ */	
+static inline void sk_pacing_shift_update(struct sock *sk, int val)	
+{	
+	if (!sk || !sk_fullsock(sk) || sk->sk_pacing_shift == val)	
+		return;	
+	sk->sk_pacing_shift = val;	
+}	
+/* SOCKEV Notifier Events */	
+#define SOCKEV_SOCKET   0x00	
+#define SOCKEV_BIND     0x01	
+#define SOCKEV_LISTEN   0x02	
+#define SOCKEV_ACCEPT   0x03	
+#define SOCKEV_CONNECT  0x04	
+#define SOCKEV_SHUTDOWN 0x05	
+int sockev_register_notify(struct notifier_block *nb);	
 int sockev_unregister_notify(struct notifier_block *nb);
+
+/* On 32bit arches, an skb frag is limited to 2^15 */
+#define SKB_FRAG_PAGE_ORDER	get_order(32768)
 
 #endif	/* _SOCK_H */
