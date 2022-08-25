@@ -9,13 +9,13 @@ AK3_DIR="$HOME/android/AnyKernel3"
 DEFCONFIG="vendor/ginkgo-perf_defconfig"
 
 export PATH="$TC_DIR/bin:$PATH"
-export KBUILD_BUILD_USER="Siimsek"
-export KBUILD_BUILD_HOST="SKProject"
-export KBUILD_BUILD_VERSION="Telegram @SKProject"
+export KBUILD_BUILD_USER="siimsek"
+export KBUILD_BUILD_HOST="linux"
+export KBUILD_BUILD_VERSION="1"
 
 if ! [ -d "${TC_DIR}" ]; then
 echo "Clang not found! Cloning to ${TC_DIR}..."
-if ! git clone -q https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r450784.git --depth=1 --single-branch ~/aosp-clang; then
+if ! git clone https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r450784.git --depth=1 --single-branch ~/aosp-clang; then
 echo "Cloning failed! Aborting..."
 exit 1
 fi
