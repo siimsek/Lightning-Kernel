@@ -734,7 +734,6 @@ endif
 ifdef CONFIG_POLLY_CLANG
 POLLY_FLAGS	+= -mllvm -polly \
 		   -mllvm -polly-ast-use-context \
-		   -mllvm -polly-detect-keep-going \
 		   -mllvm -polly-invariant-load-hoisting \
 		   -mllvm -polly-opt-fusion=max \
 		   -mllvm -polly-run-inliner \
