@@ -29,7 +29,6 @@
 #include <linux/syscore_ops.h>
 #include <linux/swait.h>
 #include <linux/ftrace.h>
-#include <linux/rtc.h>
 #include <trace/events/power.h>
 #include <linux/compiler.h>
 #include <linux/moduleparam.h>
@@ -761,17 +760,6 @@ static int enter_state(suspend_state_t state)
 	return error;
 }
 
-static void pm_suspend_marker(char *annotation)
-{
-	struct timespec ts;
-	struct rtc_time tm;
-
-	getnstimeofday(&ts);
-	rtc_time_to_tm(ts.tv_sec, &tm);
-	pr_info("PM: suspend %s %d-%02d-%02d %02d:%02d:%02d.%09lu UTC\n",
-		annotation, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
-		tm.tm_hour, tm.tm_min, tm.tm_sec, ts.tv_nsec);
-}
 
 /**
  * pm_suspend - Externally visible function for suspending the system.
@@ -787,8 +775,7 @@ int pm_suspend(suspend_state_t state)
 	if (state <= PM_SUSPEND_ON || state >= PM_SUSPEND_MAX)
 		return -EINVAL;
 
-	pm_suspend_marker("entry");
-	pr_info("suspend entry (%s)\n", mem_sleep_labels[state]);
+	pr_debug("suspend entry (%s)\n", mem_sleep_labels[state]);
 
 #ifdef CONFIG_PM_SLEEP_MONITOR
 	start_suspend_mon();
@@ -806,8 +793,8 @@ int pm_suspend(suspend_state_t state)
 	stop_suspend_mon();
 #endif
 
-	pm_suspend_marker("exit");
-	pr_info("suspend exit\n");
+
+	pr_debug("suspend exit\n");
 	measure_wake_up_time();
 	return error;
 }
