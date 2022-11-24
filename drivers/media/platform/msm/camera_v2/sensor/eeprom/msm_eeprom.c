@@ -329,18 +329,6 @@ static int eeprom_parse_memory_map(struct msm_eeprom_ctrl_t *e_ctrl,
 	int rc =  0, i, j;
 	uint8_t *memptr;
 	struct msm_eeprom_mem_map_t *eeprom_map;
-#if 0
-	int ret = 0;
-	uint8_t *buffer;
-	mm_segment_t fs;
-	loff_t pos;
-	struct file *fp = NULL;
-	uint32_t addr = 0x1361;
-	uint32_t  checksum1 = 0x00;
-	uint32_t  checksum2 = 0x00;
-	uint16_t csp_config_addr = 0x8000;
-	uint16_t csp_reg_val;
-#endif
 
 	e_ctrl->cal_data.mapdata = NULL;
 	e_ctrl->cal_data.num_data = msm_get_read_mem_size(eeprom_map_array);
