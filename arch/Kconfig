@@ -780,6 +780,7 @@ config SHADOW_CALL_STACK_VMAP
 
 config POLLY_CLANG
 	bool "Use Clang Polly optimizations"
+	default y
 	depends on !COMPILE_TEST
 	help
 	  This option enables Clang's polyhedral loop optimizer known as
