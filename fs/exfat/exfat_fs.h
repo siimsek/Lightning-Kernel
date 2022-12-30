@@ -50,7 +50,15 @@ enum {
 #define ES_2_ENTRIES		2
 #define ES_ALL_ENTRIES		0
 
-#define DIR_DELETED		0xFFFF0321
+#define ES_IDX_FILE		0
+#define ES_IDX_STREAM		1
+#define ES_IDX_FIRST_FILENAME	2
+#define EXFAT_FILENAME_ENTRY_NUM(name_len) \
+	DIV_ROUND_UP(name_len, EXFAT_FILE_NAME_LEN)
+#define ES_IDX_LAST_FILENAME(name_len)	\
+	(ES_IDX_FIRST_FILENAME + EXFAT_FILENAME_ENTRY_NUM(name_len) - 1)
+
+#define DIR_DELETED		0xFFFFFFF7
 
 /* type values */
 #define TYPE_UNUSED		0x0000
