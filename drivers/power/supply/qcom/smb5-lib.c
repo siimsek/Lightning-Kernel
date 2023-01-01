@@ -1447,8 +1447,6 @@ int smblib_set_icl_current(struct smb_charger *chg, int icl_ua)
 				POWER_SUPPLY_CONNECTOR_MICRO_USB)) {
 			rc = set_sdp_current(chg, icl_ua);
 			if (rc < 0) {
-				smblib_err(chg,
-					"Couldn't set SDP ICL rc=%d\n", rc);
 				goto out;
 			}
 		} else {
@@ -1483,8 +1481,6 @@ int smblib_set_icl_current(struct smb_charger *chg, int icl_ua)
 			gpio_get_value(chg->dc_9v_gpio) == 0)) {
 			rc = set_sdp_current(chg, icl_ua);
 			if (rc < 0) {
-				smblib_err(chg, "Couldn't set SDP ICL rc=%d\n",
-						rc);
 				goto out;
 			}
 		} else {
@@ -4247,9 +4243,6 @@ static int smblib_handle_usb_current(struct smb_charger *chg,
 				rc = vote(chg->usb_icl_votable,
 					SW_ICL_MAX_VOTER, true, USBIN_500MA);
 				if (rc < 0)
-					smblib_err(chg,
-						"Couldn't set SDP ICL rc=%d\n",
-						rc);
 				return rc;
 			}
 
