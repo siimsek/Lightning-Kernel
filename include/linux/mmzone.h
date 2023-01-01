@@ -712,7 +712,7 @@ struct zone {
 #if defined CONFIG_COMPACTION || defined CONFIG_CMA
 	/* pfn where compaction free scanner should start */
 	unsigned long		compact_cached_free_pfn;
-	/* pfn where compaction migration scanner should start */
+	/* pfn where async and sync compaction migration scanner should start */
 	unsigned long		compact_cached_migrate_pfn[ASYNC_AND_SYNC];
 	unsigned long		compact_init_migrate_pfn;
 	unsigned long		compact_init_free_pfn;
@@ -979,6 +979,11 @@ typedef struct pglist_data {
 
 #define node_start_pfn(nid)	(NODE_DATA(nid)->node_start_pfn)
 #define node_end_pfn(nid) pgdat_end_pfn(NODE_DATA(nid))
+
+static inline spinlock_t *zone_lru_lock(struct zone *zone)
+{
+	return &zone->zone_pgdat->lru_lock;
+}
 
 static inline struct lruvec *node_lruvec(struct pglist_data *pgdat)
 {

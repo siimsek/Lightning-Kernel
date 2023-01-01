@@ -100,6 +100,8 @@ int want_old_faultaround_pte = 1;
  *    ->swap_lock		(try_to_unmap_one)
  *    ->private_lock		(try_to_unmap_one)
  *    ->tree_lock		(try_to_unmap_one)
+ *    ->zone_lru_lock(zone)	(follow_page->mark_page_accessed)
+ *    ->zone_lru_lock(zone)	(check_pte_range->isolate_lru_page)
  *    ->i_pages lock		(try_to_unmap_one)
  *    ->pgdat->lru_lock		(follow_page->mark_page_accessed)
  *    ->pgdat->lru_lock		(check_pte_range->isolate_lru_page)
