@@ -59,7 +59,7 @@ static void __page_cache_release(struct page *page)
 {
 	if (PageLRU(page)) {
 		struct zone *zone = page_zone(page);
-		pg_data_t *pgdat = page_pgdat(page);
+		pg_data_t *pgdat __maybe_unused  = page_pgdat(page);
 		struct lruvec *lruvec;
 		unsigned long flags;
 
