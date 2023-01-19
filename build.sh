@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SECONDS=0 # builtin bash timer
-ZIPNAME="Lightning.Kernel-ginkgo_A11-A13_$(TZ=Europe/Istanbul date +"%Y%m%d-%H%M")-AC.zip"
+ZIPNAME="Lightning.Kernel_$(TZ=Europe/Istanbul date +"%Y%m%d-%H%M").zip"
 TC_DIR="$HOME/tc/neutron"
 GCC_64_DIR="$HOME/tc/aarch64-linux-android-4.9"
 GCC_32_DIR="$HOME/tc/arm-linux-androideabi-4.9"
@@ -64,6 +64,8 @@ rm -rf AnyKernel3
 rm -rf out/arch/arm64/boot
 echo -e "\nCompleted in $((SECONDS / 60)) minute(s) and $((SECONDS % 60)) second(s) !"
 echo "Zip: $ZIPNAME"
+echo -e "\nUploading to transfer.sh!"
+curl --upload-file $ZIPNAME https://transfer.sh/$ZIPNAME
 else
 echo -e "\nCompilation failed!"
 exit 1
