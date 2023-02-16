@@ -400,10 +400,6 @@ kgsl_mem_entry_destroy(struct kref *kref)
 						    struct kgsl_mem_entry,
 						    refcount);
 	unsigned int memtype;
-	struct kgsl_device *device = NULL;
-
-	if (entry->memdesc.pagetable != NULL)
-		device = KGSL_MMU_DEVICE(entry->memdesc.pagetable->mmu);
 
 	if (entry == NULL)
 		return;
@@ -1006,7 +1002,7 @@ struct kgsl_process_private *kgsl_process_private_find(pid_t pid)
 {
 	struct kgsl_process_private *p, *private = NULL;
 
-	spin_lock(&kgsl_driver.proclist_lock);
+	mutex_lock(&kgsl_driver.process_mutex);
 	list_for_each_entry(p, &kgsl_driver.process_list, list) {
 		if (pid_nr(p->pid) == pid) {
 			if (kgsl_process_private_get(p))
@@ -1014,7 +1010,7 @@ struct kgsl_process_private *kgsl_process_private_find(pid_t pid)
 			break;
 		}
 	}
-	spin_unlock(&kgsl_driver.proclist_lock);
+	mutex_unlock(&kgsl_driver.process_mutex);
 	return private;
 }
 
@@ -1131,9 +1127,7 @@ static void kgsl_process_private_close(struct kgsl_device_private *dev_priv,
 		kgsl_mmu_detach_pagetable(private->pagetable);
 
 	/* Remove the process struct from the master list */
-	spin_lock(&kgsl_driver.proclist_lock);
 	list_del(&private->list);
-	spin_unlock(&kgsl_driver.proclist_lock);
 
 	/*
 	 * Unlock the mutex before releasing the memory and the debugfs
@@ -1169,9 +1163,7 @@ static struct kgsl_process_private *kgsl_process_private_open(
 		kgsl_process_init_sysfs(device, private);
 		kgsl_process_init_debugfs(private);
 
-		spin_lock(&kgsl_driver.proclist_lock);
 		list_add(&private->list, &kgsl_driver.process_list);
-		spin_unlock(&kgsl_driver.proclist_lock);
 	}
 
 done:
@@ -4826,15 +4818,6 @@ static int kgsl_mmap(struct file *file, struct vm_area_struct *vma)
 		atomic64_add(entry->memdesc.size,
 				&entry->priv->gpumem_mapped);
 
-	/*
-	 * kgsl gets the entry id or the gpu address through vm_pgoff.
-	 * It is used during mmap and never needed again. But this vm_pgoff
-	 * has different meaning at other parts of kernel. Not setting to
-	 * zero will let way for wrong assumption when tried to unmap a page
-	 * from this vma.
-	 */
-	vma->vm_pgoff = 0;
-
 	trace_kgsl_mem_mmap(entry, vma->vm_start);
 	return 0;
 }
@@ -4869,7 +4852,6 @@ static const struct file_operations kgsl_fops = {
 
 struct kgsl_driver kgsl_driver  = {
 	.process_mutex = __MUTEX_INITIALIZER(kgsl_driver.process_mutex),
-	.proclist_lock = __SPIN_LOCK_UNLOCKED(kgsl_driver.proclist_lock),
 	.ptlock = __SPIN_LOCK_UNLOCKED(kgsl_driver.ptlock),
 	.devlock = __MUTEX_INITIALIZER(kgsl_driver.devlock),
 	/*

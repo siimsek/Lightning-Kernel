@@ -21,7 +21,6 @@
 #include <soc/qcom/scm.h>
 #include <soc/qcom/secure_buffer.h>
 #include <linux/ratelimit.h>
-#include <linux/bitfield.h>
 
 #include "kgsl.h"
 #include "kgsl_sharedmem.h"
@@ -488,10 +487,12 @@ done:
 
 int kgsl_lock_sgt(struct sg_table *sgt, uint64_t size)
 {
+	struct scatterlist *sg;
 	int dest_perms = PERM_READ | PERM_WRITE;
 	int source_vm = VMID_HLOS;
 	int dest_vm = VMID_CP_PIXEL;
 	int ret;
+	int i;
 
 	ret = hyp_assign_table(sgt, &source_vm, 1, &dest_vm, &dest_perms, 1);
 	if (ret) {
@@ -509,6 +510,10 @@ int kgsl_lock_sgt(struct sg_table *sgt, uint64_t size)
 		return ret;
 	}
 
+	/* Set private bit for each sg to indicate that its secured */
+	for_each_sg(sgt->sgl, sg, sgt->nents, i)
+		SetPagePrivate(sg_page(sg));
+
 	return 0;
 }
 
@@ -518,6 +523,7 @@ int kgsl_unlock_sgt(struct sg_table *sgt)
 	int source_vm = VMID_CP_PIXEL;
 	int dest_vm = VMID_HLOS;
 	int ret;
+	struct sg_page_iter sg_iter;
 
 	ret = hyp_assign_table(sgt, &source_vm, 1, &dest_vm, &dest_perms, 1);
 
@@ -526,6 +532,8 @@ int kgsl_unlock_sgt(struct sg_table *sgt)
 		return ret;
 	}
 
+	for_each_sg_page(sgt->sgl, &sg_iter, sgt->nents, 0)
+		ClearPagePrivate(sg_page_iter_page(&sg_iter));
 	return 0;
 }
 
@@ -812,7 +820,6 @@ void kgsl_memdesc_init(struct kgsl_device *device,
 {
 	struct kgsl_mmu *mmu = &device->mmu;
 	unsigned int align;
-	u32 cachemode;
 
 	memset(memdesc, 0, sizeof(*memdesc));
 	/* Turn off SVM if the system doesn't support it */
@@ -826,17 +833,6 @@ void kgsl_memdesc_init(struct kgsl_device *device,
 	/* Disable IO coherence if it is not supported on the chip */
 	if (!MMU_FEATURE(mmu, KGSL_MMU_IO_COHERENT))
 		flags &= ~((uint64_t) KGSL_MEMFLAGS_IOCOHERENT);
-
-	/*
-	 * We can't enable I/O coherency on uncached surfaces because of
-	 * situations where hardware might snoop the cpu caches which can
-	 * have stale data. This happens primarily due to the limitations
-	 * of dma caching APIs available on arm64
-	 */
-	cachemode = FIELD_GET(KGSL_CACHEMODE_MASK, flags);
-	if ((cachemode == KGSL_CACHEMODE_WRITECOMBINE ||
-		cachemode == KGSL_CACHEMODE_UNCACHED))
-		flags &= ~((u64) KGSL_MEMFLAGS_IOCOHERENT);
 
 	if (MMU_FEATURE(mmu, KGSL_MMU_NEED_GUARD_PAGE))
 		memdesc->priv |= KGSL_MEMDESC_GUARD_PAGE;
@@ -1429,6 +1425,9 @@ static int kgsl_cma_alloc_secure(struct kgsl_device *device,
 	if (result != 0)
 		goto err;
 
+	/* Set the private bit to indicate that we've secured this */
+	SetPagePrivate(sg_page(memdesc->sgt->sgl));
+
 	memdesc->priv |= KGSL_MEMDESC_TZ_LOCKED;
 
 	/* Record statistics */
@@ -1453,7 +1452,8 @@ static void kgsl_cma_unlock_secure(struct kgsl_memdesc *memdesc)
 	if (memdesc->size == 0 || !(memdesc->priv & KGSL_MEMDESC_TZ_LOCKED))
 		return;
 
-	scm_lock_chunk(memdesc, 0);
+	if (!scm_lock_chunk(memdesc, 0))
+		ClearPagePrivate(sg_page(memdesc->sgt->sgl));
 }
 
 void kgsl_sharedmem_set_noretry(bool val)

@@ -226,9 +226,8 @@ static void kgsl_iommu_remove_global(struct kgsl_mmu *mmu,
 static void kgsl_iommu_add_global(struct kgsl_mmu *mmu,
 		struct kgsl_memdesc *memdesc, const char *name)
 {
-	u32 bit;
+	u32 bit, start = 0;
 	u64 size = kgsl_memdesc_footprint(memdesc);
-	int start = 0;
 
 	if (memdesc->gpuaddr != 0)
 		return;
@@ -777,23 +776,21 @@ static bool kgsl_iommu_suppress_pagefault(uint64_t faultaddr, int write,
 	return kgsl_iommu_uche_overfetch(private, faultaddr);
 }
 
-static struct kgsl_process_private *kgsl_iommu_get_process(u64 ptbase)
+static struct kgsl_process_private *kgsl_iommu_identify_process(u64 ptbase)
 {
 	struct kgsl_process_private *p = NULL;
 	struct kgsl_iommu_pt *iommu_pt;
 
-	spin_lock(&kgsl_driver.proclist_lock);
+	mutex_lock(&kgsl_driver.process_mutex);
 	list_for_each_entry(p, &kgsl_driver.process_list, list) {
 		iommu_pt = p->pagetable->priv;
 		if (iommu_pt->ttbr0 == ptbase) {
-			if (!kgsl_process_private_get(p))
-				p = NULL;
-			spin_unlock(&kgsl_driver.proclist_lock);
+			mutex_unlock(&kgsl_driver.process_mutex);
 			return p;
 		}
 	}
 
-	spin_unlock(&kgsl_driver.proclist_lock);
+	mutex_unlock(&kgsl_driver.process_mutex);
 	return p;
 }
 
@@ -842,14 +839,15 @@ static int kgsl_iommu_fault_handler(struct iommu_domain *domain,
 		fault_type = "transaction stalled";
 
 	ptbase = KGSL_IOMMU_GET_CTX_REG_Q(ctx, TTBR0);
-	private = kgsl_iommu_get_process(ptbase);
+	private = kgsl_iommu_identify_process(ptbase);
 
-	if (private)
+	if (!kgsl_process_private_get(private))
+		private = NULL;
+	else
 		pid = pid_nr(private->pid);
 
 	if (kgsl_iommu_suppress_pagefault(addr, write, private)) {
 		iommu->pagefault_suppression_count++;
-		kgsl_process_private_put(private);
 		return ret;
 	}
 
@@ -1286,8 +1284,8 @@ static int _init_global_pt(struct kgsl_mmu *mmu, struct kgsl_pagetable *pt)
 		goto done;
 	}
 	context_bank_number = cb_num;
-	if (kgsl_mmu_is_perprocess(mmu) && MMU_FEATURE(mmu,
-				KGSL_MMU_SMMU_APERTURE)) {
+	if (!MMU_FEATURE(mmu, KGSL_MMU_GLOBAL_PAGETABLE) &&
+		scm_is_call_available(SCM_SVC_MP, CP_SMMU_APERTURE_ID)) {
 		ret = kgsl_program_smmu_aperture();
 		if (ret) {
 			pr_err("SMMU aperture programming call failed with error %d\n",

@@ -1013,6 +1013,8 @@ static irqreturn_t gmu_irq_handler(int irq, void *data)
 
 		dev_err_ratelimited(&gmu->pdev->dev,
 				"GMU watchdog expired interrupt received\n");
+		adreno_set_gpu_fault(adreno_dev, ADRENO_GMU_FAULT);
+		adreno_dispatcher_schedule(device);
 	}
 	if (status & GMU_INT_HOST_AHB_BUS_ERR)
 		dev_err_ratelimited(&gmu->pdev->dev,
@@ -1612,10 +1614,6 @@ static void gmu_snapshot(struct kgsl_device *device)
 	struct gmu_dev_ops *gmu_dev_ops = GMU_DEVICE_OPS(device);
 	struct gmu_device *gmu = KGSL_GMU_DEVICE(device);
 
-	/* Abstain from sending another nmi or over-writing snapshot */
-	if (test_and_set_bit(GMU_FAULT, &device->gmu_core.flags))
-		return;
-
 	send_nmi_to_gmu(adreno_dev);
 	/* Wait for the NMI to be handled */
 	udelay(100);
@@ -1764,6 +1762,12 @@ static void gmu_stop(struct kgsl_device *device)
 	return;
 
 error:
+	/*
+	 * The power controller will change state to SLUMBER anyway
+	 * Set GMU_FAULT flag to indicate to power contrller
+	 * that hang recovery is needed to power on GPU
+	 */
+	set_bit(GMU_FAULT, &device->gmu_core.flags);
 	dev_err(&gmu->pdev->dev, "Failed to stop GMU\n");
 	gmu_core_snapshot(device);
 }
