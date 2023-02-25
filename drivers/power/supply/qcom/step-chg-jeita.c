@@ -734,7 +734,7 @@ static int handle_jeita(struct step_chg_info *chip)
 	}
 
 set_jeita_fv:
-	pr_info(" jeita vote fv_uv:%d last_vol:%d",fv_uv,chip->last_vol);
+	pr_debug(" jeita vote fv_uv:%d last_vol:%d",fv_uv,chip->last_vol);
 	vote(chip->fv_votable, JEITA_VOTER, fv_uv ? true : false, fv_uv);
 	if(fv_uv == JEITA_GOOD_VOL &&chip->last_vol == JEITA_WARM_VOL) {
 		rc = power_supply_set_property(chip->batt_psy,
