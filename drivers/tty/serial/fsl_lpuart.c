@@ -1203,12 +1203,6 @@ static void lpuart32_break_ctl(struct uart_port *port, int break_state)
 	struct tty_struct *tty;
 	unsigned int cflag = 0;
 
-	tty = tty_port_tty_get(&port->state->port);
-	if (tty) {
-		cflag = tty->termios.c_cflag;
-		tty_kref_put(tty);
-	}
-
 	temp = lpuart32_read(port, UARTCTRL);
 
 	/*
