@@ -22,11 +22,11 @@
 
 #define SUGOV_KTHREAD_PRIORITY	50
 
-static unsigned int default_efficient_freq_lp[] = {CONFIG_SCHEDHORIZON_DEFAULT_EFFICIENT_FREQ_LP};
-static u64 default_up_delay_lp[] = {CONFIG_SCHEDHORIZON_DEFAULT_UP_DELAY_LP * NSEC_PER_MSEC};
+static unsigned int default_efficient_freq_lp[] = {0};
+static u64 default_up_delay_lp[] = {0};
 
-static unsigned int default_efficient_freq_hp[] = {CONFIG_SCHEDHORIZON_DEFAULT_EFFICIENT_FREQ_HP};
-static u64 default_up_delay_hp[] = {CONFIG_SCHEDHORIZON_DEFAULT_UP_DELAY_HP * NSEC_PER_MSEC};
+static unsigned int default_efficient_freq_hp[] = {0};
+static u64 default_up_delay_hp[] = {0};
 
 struct sugov_tunables {
 	struct gov_attr_set attr_set;
