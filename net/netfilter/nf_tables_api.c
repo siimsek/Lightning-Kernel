@@ -140,12 +140,8 @@ static void nft_trans_destroy(struct nft_trans *trans)
 	kfree(trans);
 }
 
-<<<<<<< HEAD
-static void nft_set_trans_bind(const struct nft_ctx *ctx, struct nft_set *set)
-=======
 static void __nft_set_trans_bind(const struct nft_ctx *ctx, struct nft_set *set,
 				 bool bind)
->>>>>>> b91029a3332b7f01a79925a2e57105785602c7cc
 {
 	struct net *net = ctx->net;
 	struct nft_trans *trans;
@@ -157,26 +153,16 @@ static void __nft_set_trans_bind(const struct nft_ctx *ctx, struct nft_set *set,
 		switch (trans->msg_type) {
 		case NFT_MSG_NEWSET:
 			if (nft_trans_set(trans) == set)
-<<<<<<< HEAD
-				nft_trans_set_bound(trans) = true;
-			break;
-		case NFT_MSG_NEWSETELEM:
-			if (nft_trans_elem_set(trans) == set)
-				nft_trans_elem_set_bound(trans) = true;
-=======
 				nft_trans_set_bound(trans) = bind;
 			break;
 		case NFT_MSG_NEWSETELEM:
 			if (nft_trans_elem_set(trans) == set)
 				nft_trans_elem_set_bound(trans) = bind;
->>>>>>> b91029a3332b7f01a79925a2e57105785602c7cc
 			break;
 		}
 	}
 }
 
-<<<<<<< HEAD
-=======
 static void nft_set_trans_bind(const struct nft_ctx *ctx, struct nft_set *set)
 {
 	return __nft_set_trans_bind(ctx, set, true);
@@ -187,7 +173,6 @@ static void nft_set_trans_unbind(const struct nft_ctx *ctx, struct nft_set *set)
 	return __nft_set_trans_bind(ctx, set, false);
 }
 
->>>>>>> b91029a3332b7f01a79925a2e57105785602c7cc
 static int nf_tables_register_hooks(struct net *net,
 				    const struct nft_table *table,
 				    struct nft_chain *chain,
