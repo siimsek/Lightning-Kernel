@@ -65,7 +65,7 @@ cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3
 cp out/arch/arm64/boot/dtbo.img AnyKernel3
 rm -f *zip
 cd AnyKernel3
-git checkout master &> /dev/null
+git checkout ginkgo &> /dev/null
 zip -r9 "../$ZIPNAME" * -x '*.git*' README.md *placeholder
 cd ..
 rm -rf AnyKernel3
