@@ -86,14 +86,6 @@ static void nft_objref_activate(const struct nft_ctx *ctx,
 	nft_use_inc_restore(&obj->use);
 }
 
-static void nft_objref_activate(const struct nft_ctx *ctx,
-				const struct nft_expr *expr)
-{
-	struct nft_object *obj = nft_objref_priv(expr);
-
-	obj->use++;
-}
-
 static struct nft_expr_type nft_objref_type;
 static const struct nft_expr_ops nft_objref_ops = {
 	.type		= &nft_objref_type,
