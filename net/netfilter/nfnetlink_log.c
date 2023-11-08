@@ -637,6 +637,7 @@ nfulnl_log_packet(struct net *net,
 	unsigned int plen;
 	struct nfnl_log_net *log = nfnl_log_pernet(net);
 	const struct nfnl_ct_hook *nfnl_ct = NULL;
+	enum ip_conntrack_info ctinfo = 0;
 	struct nf_conn *ct = NULL;
 	enum ip_conntrack_info ctinfo;
 
