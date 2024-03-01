@@ -46,16 +46,6 @@ sed -i 's/CONFIG_KSU=n/CONFIG_KSU=y/' arch/arm64/configs/$DEFCONFIG
 ZIPNAME="Lightning.Kernel_$(TZ=Europe/Istanbul date +"%Y%m%d-%H%M")_KSU.zip"
 fi
 
-if [[ $1 = "-r" || $1 = "--regen" ]]; then
-make O=out ARCH=arm64 $DEFCONFIG savedefconfig
-cp out/defconfig arch/arm64/configs/$DEFCONFIG
-exit
-fi
-
-if [[ $1 = "-c" || $1 = "--clean" ]]; then
-rm -rf out
-fi
-
 mkdir -p out
 make O=out ARCH=arm64 $DEFCONFIG
 
