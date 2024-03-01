@@ -52,6 +52,7 @@ make O=out ARCH=arm64 $DEFCONFIG
 echo -e "\nStarting compilation...\n"
 make -j$(nproc --all) O=out ARCH=arm64 CC=clang LD=ld.lld AR=llvm-ar AS=llvm-as NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip CROSS_COMPILE=$GCC_64_DIR/bin/aarch64-linux-android- CROSS_COMPILE_ARM32=$GCC_32_DIR/bin/arm-linux-androideabi- CLANG_TRIPLE=aarch64-linux-gnu- Image.gz-dtb dtbo.img
 sed -i 's/CONFIG_LOCALVERSION="\(.*\)-KSU"/CONFIG_LOCALVERSION="\1"/' arch/arm64/configs/$DEFCONFIG
+sed -i 's/CONFIG_KSU=y/CONFIG_KSU=n/' arch/arm64/configs/$DEFCONFIG
 
 if [ -f "out/arch/arm64/boot/Image.gz-dtb" ] && [ -f "out/arch/arm64/boot/dtbo.img" ]; then
 echo -e "\nKernel compiled succesfully! Zipping up...\n"
