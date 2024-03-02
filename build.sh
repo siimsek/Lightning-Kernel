@@ -73,7 +73,7 @@ rm -rf out/arch/arm64/boot
 echo -e "\nCompleted in $((SECONDS / 60)) minute(s) and $((SECONDS % 60)) second(s) !"
 echo "Zip: $ZIPNAME"
 echo "----------------------------------"
-curl -T $ZIPNAME oshi.at
+curl -T $ZIPNAME temp.sh
 else
 echo -e "\nCompilation failed!"
 exit 1
