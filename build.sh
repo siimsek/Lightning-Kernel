@@ -3,8 +3,8 @@
 SECONDS=0 # builtin bash timer
 ZIPNAME="Surgex-ginkgay-$(TZ=Europe/Istanbul date +"%Y%m%d-%H%M").zip"
 TC_DIR="$HOME/tc/r510928"
-GCC_64_DIR="$HOME/tc/aarch64-linux-android-14"
-GCC_32_DIR="$HOME/tc/arm-linux-androideabi-14"
+GCC_64_DIR="$HOME/tc/aarch64-linux-android-4.9"
+GCC_32_DIR="$HOME/tc/arm-linux-androideabi-4.9"
 AK3_DIR="$HOME/android/AnyKernel3"
 DEFCONFIG="vendor/ginkgo-perf_defconfig"
 
@@ -23,7 +23,7 @@ fi
 
 if ! [ -d "${GCC_64_DIR}" ]; then
 echo "gcc not found! Cloning to ${GCC_64_DIR}..."
-if ! git clone --depth=1 -b 14 https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu.git ${GCC_64_DIR}; then
+if ! git clone --depth=1 https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+/refs/tags/android-u-qpr3-beta-1_r0.6 ${GCC_64_DIR}; then
 echo "Cloning failed! Aborting..."
 exit 1
 fi
@@ -31,7 +31,7 @@ fi
 
 if ! [ -d "${GCC_32_DIR}" ]; then
 echo "gcc_32 not found! Cloning to ${GCC_32_DIR}..."
-if ! git clone --depth=1 -b 14 https://github.com/ZyCromerZ/arm-zyc-linux-gnueabi.git ${GCC_32_DIR}; then
+if ! git clone --depth=1 https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/+/refs/tags/android-u-beta-1_r0.2 ${GCC_32_DIR}; then
 echo "Cloning failed! Aborting..."
 exit 1
 fi
