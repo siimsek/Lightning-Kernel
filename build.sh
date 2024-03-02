@@ -23,7 +23,7 @@ fi
 
 if ! [ -d "${GCC_64_DIR}" ]; then
 echo "gcc not found! Cloning to ${GCC_64_DIR}..."
-if ! git clone --depth=1 https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+/refs/tags/android-u-qpr3-beta-1_r0.6 ${GCC_64_DIR}; then
+if ! git clone --depth=1 -b lineage-19.1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git ${GCC_64_DIR}; then
 echo "Cloning failed! Aborting..."
 exit 1
 fi
@@ -31,7 +31,7 @@ fi
 
 if ! [ -d "${GCC_32_DIR}" ]; then
 echo "gcc_32 not found! Cloning to ${GCC_32_DIR}..."
-if ! git clone --depth=1 https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/+/refs/tags/android-u-beta-1_r0.2 ${GCC_32_DIR}; then
+if ! git clone --depth=1 https:-b lineage-19.1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9.git ${GCC_32_DIR}; then
 echo "Cloning failed! Aborting..."
 exit 1
 fi
