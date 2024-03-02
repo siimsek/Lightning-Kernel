@@ -38,7 +38,7 @@ exit 1
 fi
 fi
 
-rm -rf KernelSU && curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
+curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
 
 if [ "$KSU" = true ]; then
 sed -i 's/CONFIG_LOCALVERSION="\(.*\)"/CONFIG_LOCALVERSION="\1-KSU"/' arch/arm64/configs/$DEFCONFIG
@@ -74,7 +74,6 @@ rm -rf out/arch/arm64/boot
 echo -e "\nCompleted in $((SECONDS / 60)) minute(s) and $((SECONDS % 60)) second(s) !"
 echo "Zip: $ZIPNAME"
 echo "----------------------------------"
-rm -rf KernelSU 
 else
 echo -e "\nCompilation failed!"
 exit 1
