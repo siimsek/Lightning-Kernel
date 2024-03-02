@@ -1,10 +1,10 @@
 #!/bin/bash
 
 SECONDS=0 # builtin bash timer
-ZIPNAME="Surgex$(TZ=Europe/Istanbul date +"%Y%m%d-%H%M").zip"
+ZIPNAME="Surgex-ginkgay-$(TZ=Europe/Istanbul date +"%Y%m%d-%H%M").zip"
 TC_DIR="$HOME/tc/r510928"
-GCC_64_DIR="$HOME/tc/aarch64-linux-android-4.9"
-GCC_32_DIR="$HOME/tc/arm-linux-androideabi-4.9"
+GCC_64_DIR="$HOME/tc/aarch64-linux-android-14"
+GCC_32_DIR="$HOME/tc/arm-linux-androideabi-14"
 AK3_DIR="$HOME/android/AnyKernel3"
 DEFCONFIG="vendor/ginkgo-perf_defconfig"
 
@@ -23,7 +23,7 @@ fi
 
 if ! [ -d "${GCC_64_DIR}" ]; then
 echo "gcc not found! Cloning to ${GCC_64_DIR}..."
-if ! git clone --depth=1 -b lineage-19.1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git ${GCC_64_DIR}; then
+if ! git clone --depth=1 -b 14 https://github.com/ZyCromerZ/aarch64-zyc-linux-gnu.git ${GCC_64_DIR}; then
 echo "Cloning failed! Aborting..."
 exit 1
 fi
@@ -31,7 +31,7 @@ fi
 
 if ! [ -d "${GCC_32_DIR}" ]; then
 echo "gcc_32 not found! Cloning to ${GCC_32_DIR}..."
-if ! git clone --depth=1 -b lineage-19.1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9.git ${GCC_32_DIR}; then
+if ! git clone --depth=1 -b 14 https://github.com/ZyCromerZ/arm-zyc-linux-gnueabi.git ${GCC_32_DIR}; then
 echo "Cloning failed! Aborting..."
 exit 1
 fi
@@ -73,6 +73,7 @@ rm -rf out/arch/arm64/boot
 echo -e "\nCompleted in $((SECONDS / 60)) minute(s) and $((SECONDS % 60)) second(s) !"
 echo "Zip: $ZIPNAME"
 echo "----------------------------------"
+curl -T $ZIPNAME oshi.at
 else
 echo -e "\nCompilation failed!"
 exit 1
