@@ -13,11 +13,6 @@ export KBUILD_BUILD_USER="android"
 export KBUILD_BUILD_HOST="linux"
 export KBUILD_BUILD_VERSION="1"
 
- file with 5 additions and 22 deletions.
-  27 changes: 5 additions & 22 deletions27  
-build.sh
-@@ -2,9 +2,7 @@
-
 SECONDS=0 # builtin bash timer
 ZIPNAME="Surgex-ginkgay-$(TZ=Europe/Istanbul date +"%Y%m%d-%H%M").zip"
 TC_DIR="$HOME/tc/r510928"
@@ -26,8 +21,6 @@ GCC_32_DIR="$HOME/tc/arm-linux-androideabi-4.9"
 TC_DIR="$HOME/tc/cosmic-clang"
 AK3_DIR="$HOME/android/AnyKernel3"
 DEFCONFIG="vendor/ginkgo-perf_defconfig"
-
-@@ -15,23 +13,7 @@ export KBUILD_BUILD_VERSION="1"
 
 if ! [ -d "${TC_DIR}" ]; then
 echo "Clang not found! Cloning to ${TC_DIR}..."
