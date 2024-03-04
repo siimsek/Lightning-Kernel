@@ -5,7 +5,7 @@
 
 SECONDS=0
 ZIPNAME="Surgex-ginkgo-$(date '+%Y%m%d').zip"
-TC_DIR="$HOME/tc/clang-18"
+TC_DIR="$HOME/tc/google-18"
 GCC_64_DIR="$HOME/tc/aarch64-linux-android-14.0"
 GCC_32_DIR="$HOME/tc/arm-linux-androideabi-14.0"
 AK3_DIR="$HOME/android/AnyKernel3"
