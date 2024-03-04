@@ -2,7 +2,7 @@
 
 SECONDS=0 # builtin bash timer
 ZIPNAME="Surgex-ginkgay-$(TZ=Europe/Istanbul date +"%Y%m%d-%H%M").zip"
-TC_DIR="$HOME/tc/cosmic-clang"
+TC_DIR="$HOME/tc/prebuild-clang"
 AK3_DIR="$HOME/android/AnyKernel3"
 DEFCONFIG="vendor/ginkgo-perf_defconfig"
 
@@ -13,7 +13,7 @@ export KBUILD_BUILD_VERSION="1"
 
 if ! [ -d "${TC_DIR}" ]; then
 echo "Clang not found! Cloning to ${TC_DIR}..."
-if ! git clone -q https://gitlab.com/GhostMaster69-dev/cosmic-clang.git ${TC_DIR}; then
+if ! git clone -q https://gitlab.com/jjpprrrr/prelude-clang/-/tree/6b4bf4cf4d9b7026d4e5f812630ce6228ca83dbd.git ${TC_DIR}; then
 echo "Cloning failed! Aborting..."
 exit 1
 fi
