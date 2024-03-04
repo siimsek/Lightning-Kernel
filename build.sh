@@ -13,7 +13,7 @@ export KBUILD_BUILD_VERSION="1"
 
 if ! [ -d "${TC_DIR}" ]; then
 echo "Clang not found! Cloning to ${TC_DIR}..."
-if ! git clone -q https://gitlab.com/jjpprrrr/prelude-clang/-/tree/6b4bf4cf4d9b7026d4e5f812630ce6228ca83dbd.git ${TC_DIR}; then
+if ! git clone -q https://gitlab.com/jjpprrrr/prelude-clang.git ${TC_DIR}; then
 echo "Cloning failed! Aborting..."
 exit 1
 fi
