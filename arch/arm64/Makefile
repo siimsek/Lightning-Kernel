@@ -76,6 +76,10 @@ ifeq ($(CONFIG_COMPAT_VDSO), y)
   # allowed to be empty, unlike CROSS_COMPILE. In the unlikely event that the
   # system $(cc-name) is actually the 32-bit ARM compiler to be used, the
   # variable can be set to the dirname (e.g. CROSS_COMPILE_ARM32=/usr/bin/).
+    export GCC_TOOLCHAIN32_DIR := $(dir $(shell which $(CROSS_COMPILE_ARM32)ld))
+    export GCC_TOOLCHAIN32 := $(realpath $(GCC_TOOLCHAIN32_DIR)/..)
+    export CLANG_PREFIX32 := --prefix=$(GCC_TOOLCHAIN32_DIR)
+    export CLANG_GCC32_TC := --gcc-toolchain=$(GCC_TOOLCHAIN32)
   # Note: this Makefile is read both before and after regenerating the config
   # (if needed). Any warning appearing before the config has been regenerated
   # should be ignored. If the error is triggered and you set
