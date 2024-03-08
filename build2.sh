@@ -68,6 +68,7 @@ make -j$(nproc --all) \
     O=out \
     ARCH=arm64 \
     CC=clang \
+    HOSTCC=clang \
     LD=ld.lld \
     AR=llvm-ar \
     AS=llvm-as \
